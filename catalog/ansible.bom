@@ -17,5 +17,22 @@
 # under the License.
 #
 brooklyn.catalog:
+  publish: &ansiblePublish
+    name: &ansibleName "Ansible"
+    description: &ansibleDescription |
+      Ansible is an open source automation platform
+    version: &ansibleVersion "1.0.0-SNAPSHOT" # BROOKLYN_ANSIBLE_VERSION
+    iconUrl: &ansibleIconUrl "https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg"
+    license_code: &ansibleLicense "Apache-2.0"
   items:
-    - https://raw.githubusercontent.com/brooklyncentral/brooklyn-ansibleentity/master/catalog/ansible.bom
+  - id: brooklyn-ansible
+    name: *ansibleName
+    description: *ansibleDescription
+    version: *ansibleVersion
+    iconUrl: *ansibleIconUrl
+    publish: *ansibleLicense
+    itemType: entity
+    item:
+      id: brooklyn-ansible
+      name: *ansibleName
+      type: org.apache.brooklyn.entity.cm.ansible.AnsibleEntity
