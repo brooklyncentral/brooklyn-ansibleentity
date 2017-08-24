@@ -72,7 +72,10 @@ brooklyn.catalog:
             effector: ansibleCommand
             params:
               module: shell
-              args: env
+              args: env | grep PWD
+            assert:
+              notEmpty: true
+              contains: PWD=
 
 #        # Should be the right test for this. But, as AnsibleEntity does not implement SoftwareProcess and the
 #        # provisioning.properties trick does not as well, it means that nginx won't be accessible from outside unless
@@ -84,10 +87,11 @@ brooklyn.catalog:
 #            $brooklyn:formatString("http://%s:%s",
 #            $brooklyn:component("ansible").attributeWhenReady("host.address"),
 #            $brooklyn:component("ansible").config("nginx.port"))
-        - type: invoke-effector
+        - type: test-ssh
           name: "3. HTTP Test"
           brooklyn.config:
-            effector: ansibleCommand
-            params:
-              module: shell
-              args: curl localhost
+            command: curl localhost
+            assertStatus:
+              equals: 0
+            assertOut:
+              contains: "Welcome to <strong>nginx</strong>"
