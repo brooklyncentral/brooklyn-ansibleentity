@@ -77,21 +77,20 @@ brooklyn.catalog:
               notEmpty: true
               contains: PWD=
 
-#        # Should be the right test for this. But, as AnsibleEntity does not implement SoftwareProcess and the
-#        # provisioning.properties trick does not as well, it means that nginx won't be accessible from outside unless
-#        # a manual operation is done to open this port. In a meantine, we are going to use the effector test to curl
-#        # locally
-#        - type: test-http-status-200
-#          name: "3. HTTP Test"
-#          url: >
-#            $brooklyn:formatString("http://%s:%s",
-#            $brooklyn:component("ansible").attributeWhenReady("host.address"),
-#            $brooklyn:component("ansible").config("nginx.port"))
-        - type: test-ssh
-          name: "3. HTTP Test"
-          brooklyn.config:
-            command: curl localhost
-            assertStatus:
-              equals: 0
-            assertOut:
-              contains: "Welcome to <strong>nginx</strong>"
+        - type: test-case
+          name: "3. HTTP Tests"
+          brooklyn.children:
+          - type: test-ssh
+            name: "3.1 Internal HTTP Tests"
+            brooklyn.config:
+              command: curl localhost
+              assertStatus:
+                equals: 0
+              assertOut:
+                contains: "Welcome to <strong>nginx</strong>"
+          - type: test-http-status-200
+            name: "3.2 External HTTP Test"
+            url: >
+              $brooklyn:formatString("http://%s:%s",
+              $brooklyn:component("ansible").attributeWhenReady("host.address"),
+              $brooklyn:component("ansible").config("nginx.port"))
