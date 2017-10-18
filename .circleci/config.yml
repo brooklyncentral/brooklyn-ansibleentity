@@ -45,7 +45,7 @@ jobs:
       # Import key in GPG
       - run: echo $GPG_SECRET_KEY | base64 --decode | $GPG_EXECUTABLE --batch --import
       # Deploy to sonatype
-      - run: mvn source:jar javadoc:jar clean deploy -DskipTests -DdeployTo=sonatype --settings .circleci/settings.xml
+      - run: mvn clean deploy -DskipTests -DdeployTo=sonatype --settings .circleci/settings.xml
 
 # Workflow definitions
 workflows:
