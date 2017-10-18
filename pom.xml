@@ -37,6 +37,14 @@
         </license>
     </licenses>
 
+    <!-- For the full list of developers, see contributors to https://github.com/brooklyncentral/brooklyn-ansibleentity -->
+    <developers>
+        <developer>
+            <name>Thomas Bouron</name>
+            <organizationUrl>https://github.com/tbouron</organizationUrl>
+        </developer>
+    </developers>
+
     <build>
         <resources>
             <resource>
