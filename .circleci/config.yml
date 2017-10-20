@@ -50,35 +50,17 @@ jobs:
 # Workflow definitions
 workflows:
   version: 2
-  deploy_snapshot:
+  deploy_sonatype:
     jobs:
       - build
-      # If we are on master, we deploy directly to sonatype (as it contains only SNAPSHOT versions)
+      # If we are on master or a release branch, we deploy directly to sonatype. Release version will still need manual
+      # approval via sonatype UI: https://oss.sonatype.org/#stagingRepositories
       - deploy:
           context: org-global
           requires:
             - build
           filters:
             branches:
-              only: master
-  deploy_release:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: /^release\/.*$/
-      # If we are in a release branch, we hold then deploy only upon manual validation
-      - hold:
-          type: approval
-          requires:
-            - build
-          filters:
-            branches:
-              only: /^release\/.*$/
-      - deploy:
-          context: org-global
-          requires:
-            - hold
-          filters:
-            branches:
-              only: /^release\/.*$/
+              only:
+                - master
+                - /^release\/.*$/
